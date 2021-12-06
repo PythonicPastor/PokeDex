@@ -3,12 +3,15 @@ import numpy as np
 from skimage import io
 import matplotlib.pyplot as plt
 
-mod = 1
 
 df = pd.read_csv('pokedex.csv')
+#Set Variables
+mod = 1
+pokeNum = np.random.choice(df.shape[0])
+bg = io.imread('bg.png')
+bg2 = io.imread('bg2.png')
 
-pokeNum = np.random.choice(df.shape[0]) #708 legendary
-
+#Clean Data
 df = df.drop(df.columns.difference(['pokedex_number',
                                     'name',
                                     'status',
@@ -26,8 +29,7 @@ df = df.drop(df.columns.difference(['pokedex_number',
 df = df.replace(np.nan, '')
 #list(df.columns)
 
-bg = io.imread('bg.png')
-bg2 = io.imread('bg2.png')
+#Assign Image to Pokedex
 if pokeNum <= 12:
     image = io.imread('https://assets.pokemon.com/assets/cms2/img/pokedex/full/00'+str(df.iloc[pokeNum]['pokedex_number'])+'.png')
 elif 12 < pokeNum <= 102:
@@ -35,6 +37,7 @@ elif 12 < pokeNum <= 102:
 else:
     image = io.imread('https://assets.pokemon.com/assets/cms2/img/pokedex/full/'+str(df.iloc[pokeNum]['pokedex_number'])+'.png')
 
+#Plot Images and Basic Stats to Pokedex
 plt.rcParams.update({
     "lines.color": "black",
     "patch.edgecolor": "white",
@@ -62,11 +65,11 @@ plt.subplot(1, 2, 2)
 plt.imshow(bg)
 plt.text(0,-5,df.iloc[pokeNum]['type_1'], size=16)
 plt.text(185,-5,df.iloc[pokeNum]['type_2'], size=16)
-plt.text(10,50,'Lv:'+str(round(df.iloc[pokeNum]['hp']/10)*mod), color='black', size=16)
+plt.text(10,50,'HP:'+str(df.iloc[pokeNum]['hp']), color='black', size=16)
 plt.text(10,150,df.iloc[pokeNum]['ability_1'], color='black', size=16)
 plt.text(10,250,df.iloc[pokeNum]['ability_2'], color='black', size=16)
-plt.text(10,350,'Atk:'+str(round(df.iloc[pokeNum]['attack']/10)), color='black', size=16)
-plt.text(10,450,'Def:'+str(round(df.iloc[pokeNum]['defense']/10)), color='black', size=16)
-plt.text(50,650,'Catch Chance:'+ str(round(df.iloc[pokeNum]['catch_rate']/2))+'%', color='black')
+plt.text(10,350,'Atk:'+str(df.iloc[pokeNum]['attack']), color='black', size=16)
+plt.text(10,450,'Def:'+str(df.iloc[pokeNum]['defense']), color='black', size=16)
+plt.text(50,650,'Catch Chance:'+ str(df.iloc[pokeNum]['catch_rate'])+'%', color='black')
 
 plt.show()
